@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CKA Retake Master - 취약점 정복 & 모바일 학습 허브</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            k8s: '#326ce5',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Card 3D Flip Effect */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+    /* Mobile Touch Scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Pre code wrap */
+    pre code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-8">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-lg text-white leading-tight">CKA Retake Master</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-medium border border-blue-500/30">v1.35 대비</span>
+          </div>
+          <p class="text-xs text-slate-400">1회차 46% ➔ 2회차 80%+ 합격 완주 허브</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="다크/라이트 모드">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
+        </button>
+        <a href="#flashcardSection" onclick="switchTab('flashcard')" class="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium rounded-lg shadow transition">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+          출퇴근 플래시카드
+        </a>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Tabs -->
+    <div class="max-w-6xl mx-auto hidden md:flex items-center gap-1 mt-3 border-t border-slate-800/80 pt-2">
+      <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 bg-blue-600 text-white">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 대시보드
+      </button>
+      <button onclick="switchTab('clinic')" id="tab-btn-clinic" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i> 3대 취약점 클리닉 (75%)
+      </button>
+      <button onclick="switchTab('exam01')" id="tab-btn-exam01" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+        <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i> 1회차 복기 6제
+      </button>
+      <button onclick="switchTab('flashcard')" id="tab-btn-flashcard" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> 출퇴근 플래시카드
+      </button>
+      <button onclick="switchTab('cheatsheet')" id="tab-btn-cheatsheet" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+        <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> 시험장 치트시트
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
+
+    <!-- 1. DASHBOARD TAB -->
+    <section id="sec-dashboard" class="tab-content space-y-6">
+      
+      <!-- Top Alert Card: Score Gap & Retake Goal -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-slate-800/90 to-blue-950/40 border border-slate-700/80 p-5 md:p-6 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/30">
+              <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+              1회차 시험 분석 완료 (Retake 가이드)
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-white">부족 점수 20%p를 극복하고 합격권(80%+)으로</h2>
+            <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
+              1회차 결과 <strong class="text-rose-400">46%</strong>에서 합격 기준 <strong class="text-amber-300">66%</strong>까지 남은 격차는 <strong>20%p</strong>입니다.
+              하위 3개 영역(<span class="text-blue-300 font-medium">Troubleshooting</span>, <span class="text-blue-300 font-medium">Cluster Architecture</span>, <span class="text-blue-300 font-medium">Services & Networking</span>)이
+              전체 시험 배점의 <strong>75%</strong>를 차지하므로, 이 3개 도메인의 빈출 함정만 정복하면 바로 합격선에 도달합니다.
+            </p>
+          </div>
+
+          <!-- Score Card Visual -->
+          <div class="flex items-center justify-center gap-4 bg-slate-900/80 p-4 rounded-xl border border-slate-700 shrink-0">
+            <div class="text-center">
+              <span class="text-xs text-slate-400 block mb-1">1회차 성적</span>
+              <span class="text-3xl font-extrabold text-rose-400">46<span class="text-sm font-normal">%</span></span>
+              <span class="text-[10px] text-rose-400/80 block mt-0.5">불합격</span>
+            </div>
+            <div class="text-slate-600 font-light text-2xl">➔</div>
+            <div class="text-center">
+              <span class="text-xs text-slate-400 block mb-1">합격 기준</span>
+              <span class="text-3xl font-extrabold text-amber-400">66<span class="text-sm font-normal">%</span></span>
+              <span class="text-[10px] text-amber-400/80 block mt-0.5">Cut-off</span>
+            </div>
+            <div class="text-slate-600 font-light text-2xl">➔</div>
+            <div class="text-center">
+              <span class="text-xs text-slate-400 block mb-1">목표 점수</span>
+              <span class="text-3xl font-extrabold text-emerald-400">80+<span class="text-sm font-normal">%</span></span>
+              <span class="text-[10px] text-emerald-400/80 block mt-0.5">안정 합격</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domain Breakdown Grid (3 Lowest Domains vs High Score Domains) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-base text-white flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-400"></i>
+            CKA 도메인별 배점 비중 및 취약점 분석
+          </h3>
+          <span class="text-xs text-slate-400">빨간색 배지가 1회차 최하위 3개 영역</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: Troubleshooting -->
+          <div class="bg-slate-800/90 rounded-xl p-4 border border-rose-900/50 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold border border-rose-500/30">배점 1위 (30%)</span>
+              <span class="text-xs text-rose-400 font-medium">최하위 점수 1</span>
+            </div>
+            <h4 class="font-bold text-white text-base mb-1">Troubleshooting (30%)</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-3">
+              Node NotReady, Kubelet 장애, kube-apiserver static pod 다운, 로깅 사이드카 volume 오타.
+            </p>
+            <div class="bg-slate-900/90 p-2.5 rounded-lg text-xs space-y-1 text-slate-300 border border-slate-700/60">
+              <div class="text-rose-300 font-medium">⚠️ 1회차 실패 원인:</div>
+              <div>• static pod를 `systemctl restart`로 시도</div>
+              <div>• Deployment YAML에서 sidecar volume 위치 계층 오타</div>
+            </div>
+          </div>
+
+          <!-- Card 2: Cluster Architecture -->
+          <div class="bg-slate-800/90 rounded-xl p-4 border border-rose-900/50 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold border border-rose-500/30">배점 2위 (25%)</span>
+              <span class="text-xs text-rose-400 font-medium">최하위 점수 2</span>
+            </div>
+            <h4 class="font-bold text-white text-base mb-1">Cluster Architecture (25%)</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-3">
+              etcd 백업/복원, kubeadm upgrade, RBAC/SA, Helm chart 배포 및 버전 지정, CRD vs CSR.
+            </p>
+            <div class="bg-slate-900/90 p-2.5 rounded-lg text-xs space-y-1 text-slate-300 border border-slate-700/60">
+              <div class="text-rose-300 font-medium">⚠️ 1회차 실패 원인:</div>
+              <div>• Helm 설치 시 `APP VERSION`과 `CHART VERSION` 혼동</div>
+              <div>• CRD spec에 `subject`를 찾으려다 시간 낭비</div>
+            </div>
+          </div>
+
+          <!-- Card 3: Services & Networking -->
+          <div class="bg-slate-800/90 rounded-xl p-4 border border-rose-900/50 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold border border-rose-500/30">배점 3위 (20%)</span>
+              <span class="text-xs text-rose-400 font-medium">최하위 점수 3</span>
+            </div>
+            <h4 class="font-bold text-white text-base mb-1">Services & Networking (20%)</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-3">
+              Ingress v1, Gateway API(HTTPRoute), NetworkPolicy Ingress/Egress, CoreDNS, Pod DNS 형식.
+            </p>
+            <div class="bg-slate-900/90 p-2.5 rounded-lg text-xs space-y-1 text-slate-300 border border-slate-700/60">
+              <div class="text-rose-300 font-medium">⚠️ 1회차 실패 원인:</div>
+              <div>• Pod DNS에 Pod 이름을 기입 (정답은 IP dash)</div>
+              <div>• NetworkPolicy 배열 문법(AND vs OR) 실수</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Roadmap Card -->
+      <div class="bg-slate-800/80 rounded-xl p-5 border border-slate-700">
+        <h3 class="font-bold text-white text-base mb-3 flex items-center gap-2">
+          <i data-lucide="compass" class="w-4 h-4 text-indigo-400"></i>
+          추천 학습 로드맵 & 실전 대비법
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="p-3.5 bg-slate-900/70 rounded-lg border border-slate-800">
+            <div class="text-xs font-bold text-blue-400 mb-1">STEP 1. 1회차 복기 문제 격파</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              [1회차 복기 6제] 탭에서 내가 틀렸던 6개 문제를 해설 보지 않고 직접 풀어보고, 5단계 풀이 프로세스와 비교합니다.
+            </p>
+          </div>
+          <div class="p-3.5 bg-slate-900/70 rounded-lg border border-slate-800">
+            <div class="text-xs font-bold text-purple-400 mb-1">STEP 2. 출퇴근 틈새 암기</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              [출퇴근 플래시카드] 탭을 열고 지하철/버스에서 하루 10분씩 넘겨보며 단골 함정(PV storageClass, CRD subject 등)을 머릿속에 각인합니다.
+            </p>
+          </div>
+          <div class="p-3.5 bg-slate-900/70 rounded-lg border border-slate-800">
+            <div class="text-xs font-bold text-emerald-400 mb-1">STEP 3. 치트시트 & 타임어택</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              [치트시트]의 원라이너 명령어들을 손에 익히고, 문제당 8분 내에 해결할 수 있도록 `kubectl explain`과 공식 문서를 활용합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. CLINIC TAB (Troubleshooting, Cluster Architecture, Services & Networking) -->
+    <section id="sec-clinic" class="tab-content hidden space-y-6">
+      
+      <!-- Section Header -->
+      <div class="border-b border-slate-800 pb-3">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-400"></i>
+          3대 취약 영역 심층 클리닉 (합격의 75% 결정)
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">1회차 결과 메일에서 지적된 3개 영역의 핵심 해결 공식과 공식 문서 검색어를 제공합니다.</p>
+      </div>
+
+      <!-- Domain 1: Troubleshooting (30%) -->
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <h3 class="text-lg font-bold text-white">1. Troubleshooting (배점 30%)</h3>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-slate-700 text-slate-300 font-mono">문서 검색: `troubleshoot clusters`, `debug pods`</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Item 1-1: Kube-apiserver Down -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-sm text-blue-300 flex items-center gap-1.5">
+                <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i> kube-apiserver 장애 복구
+              </h4>
+              <span class="text-[11px] bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">Static Pod</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              `kubectl` 명령어가 먹통일 때. 절대 `systemctl restart kube-apiserver` 하지 마세요 (서비스가 아닙니다).
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 1. kubelet 상태 확인</div>
+              <div class="text-slate-300">systemctl status kubelet</div>
+              <div># 2. 매니페스트 오타 및 인증서 확인</div>
+              <div class="text-slate-300">vi /etc/kubernetes/manifests/kube-apiserver.yaml</div>
+              <div># 3. containerd 컨테이너 로그 직접 조회</div>
+              <div class="text-slate-300">crictl ps -a | grep apiserver</div>
+              <div class="text-slate-300">crictl logs &lt;container-id&gt;</div>
+            </div>
+          </div>
+
+          <!-- Item 1-2: Node NotReady -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-sm text-amber-300 flex items-center gap-1.5">
+                <i data-lucide="server" class="w-4 h-4 text-amber-400"></i> Worker Node NotReady
+              </h4>
+              <span class="text-[11px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800">Kubelet & CNI</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              노드가 NotReady 상태일 때는 Kubelet 서비스와 CNI 플러그인을 점검합니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 1. 노드 원인 파악</div>
+              <div class="text-slate-300">kubectl describe node &lt;node-name&gt;</div>
+              <div># 2. 해당 노드 SSH 접속 후 Kubelet 로그 확인</div>
+              <div class="text-slate-300">systemctl status kubelet</div>
+              <div class="text-slate-300">journalctl -u kubelet -xe --no-pager -n 50</div>
+              <div># 3. CNI 디렉터리 확인</div>
+              <div class="text-slate-300">ls -la /etc/cni/net.d/</div>
+            </div>
+          </div>
+
+          <!-- Item 1-3: Sidecar Logging -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-sm text-purple-300 flex items-center gap-1.5">
+                <i data-lucide="file-text" class="w-4 h-4 text-purple-400"></i> 로깅 사이드카 컨테이너 추가
+              </h4>
+              <span class="text-[11px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded border border-purple-800">YAML 계층 함정</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              기존 컨테이너가 파일로 쓰는 로그를 `kubectl logs`로 볼 수 있게 사이드카를 붙일 때 가장 잦은 실수는 YAML 들여쓰기입니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 space-y-0.5">
+              <div class="text-rose-400"># spec.containers (X) ➔ Unknown field 에러 발생!</div>
+              <div class="text-emerald-400"># 반드시 spec.template.spec 아래에 위치:</div>
+              <div>spec:</div>
+              <div>&nbsp;&nbsp;template:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;spec:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;containers: [ ... ]</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volumes: [ emptyDir: {} ]</div>
+            </div>
+          </div>
+
+          <!-- Item 1-4: Pod CrashLoopBackOff -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-sm text-rose-300 flex items-center gap-1.5">
+                <i data-lucide="repeat" class="w-4 h-4 text-rose-400"></i> CrashLoopBackOff / 이전 로그 조회
+              </h4>
+              <span class="text-[11px] bg-rose-950 text-rose-300 px-2 py-0.5 rounded border border-rose-800">--previous</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              컨테이너가 기동 즉시 죽어서 `kubectl logs`에 아무것도 안 나올 때는 이전 컨테이너 인스턴스의 로그를 확인합니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 1. 이전 인스턴스 로그 확인</div>
+              <div class="text-slate-300">kubectl logs &lt;pod-name&gt; --previous</div>
+              <div># 2. 컨테이너 종료 코드(Exit Code) 확인</div>
+              <div class="text-slate-300">kubectl describe pod &lt;pod-name&gt; | grep -A 5 "Last State"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domain 2: Cluster Architecture (25%) -->
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+            <h3 class="text-lg font-bold text-white">2. Cluster Architecture (배점 25%)</h3>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-slate-700 text-slate-300 font-mono">문서 검색: `operating etcd clusters`, `upgrading kubeadm clusters`</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Item 2-1: etcd Backup / Restore -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-cyan-300 flex items-center gap-1.5">
+              <i data-lucide="database" class="w-4 h-4 text-cyan-400"></i> etcd 스냅샷 백업 & 복원
+            </h4>
+            <p class="text-xs text-slate-300">
+              `ETCDCTL_API=3` 필수! 복원 후 static pod 매니페스트의 hostPath를 변경해야 실제 반영됩니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 백업 (인증서 3종 필수)</div>
+              <div class="text-slate-300 leading-tight">ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /root/etcd-backup.db</div>
+              <div># 복원 (새 디렉터리로 복원)</div>
+              <div class="text-slate-300 leading-tight">ETCDCTL_API=3 etcdctl --data-dir=/var/lib/etcd-new snapshot restore /root/etcd-backup.db</div>
+              <div class="text-amber-400"># 주의: /etc/kubernetes/manifests/etcd.yaml 의 hostPath를 /var/lib/etcd-new로 변경!</div>
+            </div>
+          </div>
+
+          <!-- Item 2-2: CRD vs RBAC vs CSR -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-indigo-300 flex items-center gap-1.5">
+              <i data-lucide="key" class="w-4 h-4 text-indigo-400"></i> CRD vs RBAC Subjects vs CSR (1회차 혼동)
+            </h4>
+            <p class="text-xs text-slate-300">
+              문제에 `subject`라는 단어가 나왔을 때 CRD에 넣으려다 실패했던 함정입니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs text-slate-300 space-y-1.5">
+              <div><strong class="text-rose-400">CRD:</strong> 리소스 타입 정의 (`kind: CustomResourceDefinition`). <span class="text-rose-400 font-bold">`subject` 필드 없음!</span></div>
+              <div><strong class="text-emerald-400">RBAC RoleBinding:</strong> `subjects` 배열에 User, Group, ServiceAccount를 매핑하여 권한 부여.</div>
+              <div><strong class="text-blue-400">CSR:</strong> 클라이언트 인증서 subject (`CN`, `O`). signerName은 `kubernetes.io/kube-apiserver-client`.</div>
+            </div>
+          </div>
+
+          <!-- Item 2-3: Helm Chart & Version -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-blue-300 flex items-center gap-1.5">
+              <i data-lucide="package" class="w-4 h-4 text-blue-400"></i> Helm 저장소 등록 & 특정 버전 고정
+            </h4>
+            <p class="text-xs text-slate-300">
+              지문에서 특정 버전을 설치하라고 할 때 `APP VERSION`이 아닌 `CHART VERSION`을 넣어야 합니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 1. 레포 추가 및 업데이트</div>
+              <div class="text-slate-300">helm repo add &lt;repo-name&gt; &lt;repo-url&gt;</div>
+              <div class="text-slate-300">helm repo update</div>
+              <div># 2. 사용 가능한 CHART VERSION 확인</div>
+              <div class="text-slate-300">helm search repo &lt;repo-name&gt;/&lt;chart&gt; --versions</div>
+              <div># 3. 버전 지정하여 배포</div>
+              <div class="text-slate-300">helm install &lt;release-name&gt; &lt;repo&gt;/&lt;chart&gt; --version &lt;CHART_VERSION&gt; -n &lt;ns&gt;</div>
+            </div>
+          </div>
+
+          <!-- Item 2-4: Kubeadm Upgrade Steps -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-emerald-300 flex items-center gap-1.5">
+              <i data-lucide="arrow-up-circle" class="w-4 h-4 text-emerald-400"></i> kubeadm 클러스터 업그레이드 순서
+            </h4>
+            <p class="text-xs text-slate-300">
+              drain ➔ kubeadm 업그레이드 ➔ kubeadm upgrade apply ➔ kubelet 업그레이드 ➔ uncordon
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div class="text-slate-300">kubectl drain &lt;node&gt; --ignore-daemonsets</div>
+              <div class="text-slate-300">apt-mark unhold kubeadm &amp;&amp; apt-get install -y kubeadm=1.xx.x-1.1 &amp;&amp; apt-mark hold kubeadm</div>
+              <div class="text-slate-300">kubeadm upgrade plan &amp;&amp; kubeadm upgrade apply v1.xx.x</div>
+              <div class="text-slate-300">apt-mark unhold kubelet kubectl &amp;&amp; apt-get install -y kubelet=1.xx.x-1.1 kubectl=1.xx.x-1.1 &amp;&amp; apt-mark hold kubelet kubectl</div>
+              <div class="text-slate-300">systemctl daemon-reload &amp;&amp; systemctl restart kubelet</div>
+              <div class="text-slate-300">kubectl uncordon &lt;node&gt;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domain 3: Services & Networking (20%) -->
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <h3 class="text-lg font-bold text-white">3. Services & Networking (배점 20%)</h3>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-slate-700 text-slate-300 font-mono">문서 검색: `dns for services and pods`, `network policies`, `ingress`</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Item 3-1: Pod DNS vs Service DNS -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-emerald-300 flex items-center gap-1.5">
+              <i data-lucide="network" class="w-4 h-4 text-emerald-400"></i> Pod DNS vs Service DNS (시험 함정)
+            </h4>
+            <p class="text-xs text-slate-300">
+              지문에서 "lookup the DNS of the Pod"라고 했을 때 Pod 이름을 넣으면 0점입니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs text-slate-300 space-y-1">
+              <div>• <strong>Service DNS:</strong> <code class="text-cyan-400">&lt;svc-name&gt;.&lt;namespace&gt;.svc.cluster.local</code></div>
+              <div>• <strong>Pod DNS:</strong> <code class="text-emerald-400">&lt;ip-with-dashes&gt;.&lt;namespace&gt;.pod.cluster.local</code></div>
+              <div class="text-slate-400 text-[11px] mt-1">예: Pod IP가 10.244.1.88, ns가 prod라면 ➔ <span class="text-emerald-300">10-244-1-88.prod.pod.cluster.local</span></div>
+            </div>
+          </div>
+
+          <!-- Item 3-2: Ingress v1 -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-cyan-300 flex items-center gap-1.5">
+              <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i> Ingress v1 필수 필드
+            </h4>
+            <p class="text-xs text-slate-300">
+              v1beta1이 아닌 `networking.k8s.io/v1`을 사용하며, 아래 두 필드를 빠뜨리지 마세요.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 space-y-1">
+              <div>1. <span class="text-amber-300">spec.ingressClassName</span>: "nginx" 등 명시</div>
+              <div>2. <span class="text-amber-300">paths[].pathType</span>: "Prefix" 또는 "Exact" 명시</div>
+              <div>3. <span class="text-cyan-300">backend.service.port.number</span>: 숫자 포트 지정</div>
+            </div>
+          </div>
+
+          <!-- Item 3-3: NetworkPolicy Syntax -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-indigo-300 flex items-center gap-1.5">
+              <i data-lucide="shield" class="w-4 h-4 text-indigo-400"></i> NetworkPolicy AND vs OR 문법
+            </h4>
+            <p class="text-xs text-slate-300">
+              하이픈(`-`) 위치 하나로 완전히 다른 정책이 됩니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 space-y-1">
+              <div class="text-emerald-400"># AND 조건 (해당 NS 내의 해당 라벨 Pod만 허용):</div>
+              <div>- namespaceSelector: { matchLabels: { team: dev } }</div>
+              <div>&nbsp;&nbsp;podSelector: { matchLabels: { role: frontend } }</div>
+              <div class="text-cyan-400 mt-2"># OR 조건 (해당 NS의 모든 Pod 또는 모든 NS의 해당 라벨 Pod):</div>
+              <div>- namespaceSelector: { matchLabels: { team: dev } }</div>
+              <div>- podSelector: { matchLabels: { role: frontend } }</div>
+            </div>
+          </div>
+
+          <!-- Item 3-4: Endpoint Debugging -->
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-sm text-purple-300 flex items-center gap-1.5">
+              <i data-lucide="search" class="w-4 h-4 text-purple-400"></i> Service Endpoint 누락 디버깅
+            </h4>
+            <p class="text-xs text-slate-300">
+              서비스를 생성했는데 트래픽이 안 통하면 가장 먼저 `kubectl get ep`를 봅니다.
+            </p>
+            <div class="bg-slate-950 p-2.5 rounded text-xs font-mono text-emerald-400 space-y-1">
+              <div># 1. 엔드포인트 확인 (비어있으면 selector 불일치)</div>
+              <div class="text-slate-300">kubectl get endpoints &lt;svc-name&gt; -n &lt;ns&gt;</div>
+              <div># 2. Pod 라벨과 서비스 Selector 대조</div>
+              <div class="text-slate-300">kubectl get pods -n &lt;ns&gt; --show-labels</div>
+              <div class="text-slate-300">kubectl describe svc &lt;svc-name&gt; -n &lt;ns&gt; | grep Selector</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 3. EXAM-01 TAB (Learner's Actual Recall Lab) -->
+    <section id="sec-exam01" class="tab-content hidden space-y-6">
+      
+      <div class="border-b border-slate-800 pb-3">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="check-square" class="w-5 h-5 text-emerald-400"></i>
+          1회차 시험 복기 6대 문제 연습 (exam-01)
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">
+          시험 당시 막혔던 6개 주제를 다시 풀기 위한 연습 세트입니다. 단계별 힌트와 5단계 정답을 확인하세요.
+        </p>
+      </div>
+
+      <div class="space-y-4" id="examQuestionsContainer">
+        <!-- Rendered by JavaScript: 6 Interactive Question Cards with Hints & Solution Accordion -->
+      </div>
+
+    </section>
+
+    <!-- 4. FLASHCARD TAB (Commuter Mobile Mode) -->
+    <section id="sec-flashcard" class="tab-content hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="smartphone" class="w-5 h-5 text-purple-400"></i>
+            출퇴근 모바일 1초 플래시카드
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">지하철/버스에서 카드를 탭하여 뒤집으며 핵심 원리와 함정을 암기하세요.</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <button onclick="filterFlashcards('all')" class="fc-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-blue-600 text-white" data-cat="all">전체</button>
+          <button onclick="filterFlashcards('troubleshoot')" class="fc-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white" data-cat="troubleshoot">트러블슈팅</button>
+          <button onclick="filterFlashcards('architecture')" class="fc-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white" data-cat="architecture">아키텍처</button>
+          <button onclick="filterFlashcards('network')" class="fc-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white" data-cat="network">네트워킹</button>
+          <button onclick="filterFlashcards('storage')" class="fc-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white" data-cat="storage">스토리지/기타</button>
+        </div>
+      </div>
+
+      <!-- Flashcard Interactive Area -->
+      <div class="max-w-xl mx-auto w-full py-4">
+        
+        <!-- Card Indicator & Progress -->
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-3 px-1">
+          <span id="fcCategoryBadge" class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 font-medium">트러블슈팅</span>
+          <div class="flex items-center gap-2">
+            <span id="fcCounter">1 / 20</span>
+            <button onclick="shuffleFlashcards()" class="p-1 hover:text-white transition" title="랜덤 섞기">
+              <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Flip Card Container -->
+        <div class="perspective-1000 w-full h-80 sm:h-96 cursor-pointer select-none" onclick="flipFlashcard()">
+          <div id="flashcardInner" class="w-full h-full relative transform-style-3d transition-transform duration-500 rounded-2xl shadow-2xl">
+            
+            <!-- FRONT (Question) -->
+            <div class="absolute inset-0 backface-hidden bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-slate-700/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-blue-400 font-semibold flex items-center gap-1.5">
+                  <i data-lucide="help-circle" class="w-4 h-4"></i> 질문 (TAP TO FLIP)
+                </span>
+                <span class="text-slate-500">앞면</span>
+              </div>
+              <div class="my-auto text-center px-2">
+                <p id="fcQuestion" class="text-base sm:text-xl font-bold text-white leading-relaxed">
+                  kube-apiserver가 응답하지 않을 때 systemctl restart kube-apiserver로 재시작할 수 있는가?
+                </p>
+              </div>
+              <div class="text-center text-xs text-slate-400 flex items-center justify-center gap-1">
+                <i data-lucide="touchpad" class="w-3.5 h-3.5 text-blue-400 animate-pulse"></i> 탭하여 정답 확인하기
+              </div>
+            </div>
+
+            <!-- BACK (Answer) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-slate-900 to-blue-950/60 border-2 border-blue-500/60 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i> 정답 & 핵심 원리
+                </span>
+                <span class="text-slate-500">뒷면</span>
+              </div>
+              <div class="my-auto space-y-3 px-2">
+                <div id="fcVerdict" class="text-xl sm:text-2xl font-extrabold text-rose-400">
+                  ❌ 불가능! (X)
+                </div>
+                <p id="fcAnswer" class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  kube-apiserver는 systemd 서비스가 아닌 kubelet이 관리하는 <strong>Static Pod</strong>입니다.
+                  매니페스트(/etc/kubernetes/manifests/kube-apiserver.yaml)를 점검하거나 `crictl ps -a`로 확인해야 합니다.
+                </p>
+                <div id="fcTip" class="text-xs p-2.5 rounded bg-blue-950/80 border border-blue-800 text-blue-300 font-mono">
+                  💡 점검: crictl logs &lt;container-id&gt;
+                </div>
+              </div>
+              <div class="text-center text-xs text-slate-400">
+                카드를 다시 탭하면 앞면으로 돌아갑니다
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="flex items-center justify-between gap-4 mt-6">
+          <button onclick="prevFlashcard(event)" class="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm flex items-center justify-center gap-2 border border-slate-700 transition">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i> 이전 카드
+          </button>
+          <button onclick="flipFlashcard(event)" class="p-3 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border border-blue-500/40 transition">
+            <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+          </button>
+          <button onclick="nextFlashcard(event)" class="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition">
+            다음 카드 <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 5. CHEATSHEET TAB (Speed Imperative) -->
+    <section id="sec-cheatsheet" class="tab-content hidden space-y-6">
+      
+      <div class="border-b border-slate-800 pb-3">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="terminal" class="w-5 h-5 text-cyan-400"></i>
+          시험장 1초 복사 치트시트 & 원라이너
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">YAML을 처음부터 짜지 마세요. Imperative 명령어로 뼈대를 뽑고 최소한만 수정합니다.</p>
+      </div>
+
+      <!-- Essential Bash Aliases -->
+      <div class="bg-slate-800/90 rounded-xl border border-slate-700 p-4 space-y-3">
+        <h3 class="font-bold text-sm text-cyan-300 flex items-center gap-2">
+          <i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i> 시험 시작 30초 세팅
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+            <code class="text-xs text-emerald-400 font-mono">alias k=kubectl</code>
+            <button onclick="copyText('alias k=kubectl')" class="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded">복사</button>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+            <code class="text-xs text-emerald-400 font-mono">export do="--dry-run=client -o yaml"</code>
+            <button onclick="copyText('export do=\"--dry-run=client -o yaml\"')" class="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded">복사</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imperative Command List -->
+      <div class="space-y-3" id="cheatsheetList">
+        <!-- Javascript renders categories -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Tab Bar (Fixed) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-t border-slate-800 px-2 py-1 flex items-center justify-around">
+    <button onclick="switchTab('dashboard')" id="m-tab-btn-dashboard" class="mobile-nav-btn flex flex-col items-center py-1 px-2 text-blue-500">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+      <span class="text-[10px] mt-0.5 font-medium">대시보드</span>
+    </button>
+    <button onclick="switchTab('clinic')" id="m-tab-btn-clinic" class="mobile-nav-btn flex flex-col items-center py-1 px-2 text-slate-400">
+      <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+      <span class="text-[10px] mt-0.5 font-medium">클리닉(75%)</span>
+    </button>
+    <button onclick="switchTab('exam01')" id="m-tab-btn-exam01" class="mobile-nav-btn flex flex-col items-center py-1 px-2 text-slate-400">
+      <i data-lucide="check-square" class="w-5 h-5"></i>
+      <span class="text-[10px] mt-0.5 font-medium">복기6제</span>
+    </button>
+    <button onclick="switchTab('flashcard')" id="m-tab-btn-flashcard" class="mobile-nav-btn flex flex-col items-center py-1 px-2 text-slate-400">
+      <i data-lucide="smartphone" class="w-5 h-5"></i>
+      <span class="text-[10px] mt-0.5 font-medium">플래시카드</span>
+    </button>
+    <button onclick="switchTab('cheatsheet')" id="m-tab-btn-cheatsheet" class="mobile-nav-btn flex flex-col items-center py-1 px-2 text-slate-400">
+      <i data-lucide="terminal" class="w-5 h-5"></i>
+      <span class="text-[10px] mt-0.5 font-medium">치트시트</span>
+    </button>
+  </nav>
+
+  <!-- Global Toast for Copy -->
+  <div id="toast" class="fixed bottom-16 md:bottom-6 right-4 z-50 bg-emerald-600 text-white text-xs px-3.5 py-2 rounded-lg shadow-xl opacity-0 transition-opacity pointer-events-none flex items-center gap-1.5">
+    <i data-lucide="check" class="w-4 h-4"></i> 클립보드에 복사되었습니다!
+  </div>
+
+  <!-- Main JavaScript Data & Logic -->
+  <script>
+    // --- Data: Exam-01 Recall Questions ---
+    const examQuestions = [
+      {
+        id: 1,
+        title: "01. 기존 PV에 다른 Namespace의 PVC 바인딩",
+        domain: "Storage / Cluster-scoped",
+        timeLimit: "8분",
+        problem: "클러스터에 이미 존재하는 PV(`bind-pv`)를 사용하여 새로운 Namespace `storage-exam`에 PVC `bind-pvc`를 생성하여 정상적으로 Bound 시키시오.",
+        trap: "PV는 Namespace가 없는 Cluster-scoped 리소스입니다. PV에 StorageClass가 없으면 PVC 생성 시 반드시 `storageClassName: \"\"`를 명시해야 합니다. 생략 시 기본 StorageClass가 자동 매핑되어 바인딩되지 않습니다.",
+        searchWord: "configure a pod to use a persistentvolume",
+        decode: {
+          WHERE: "PV: Cluster-wide / PVC: storage-exam Namespace",
+          WHAT: "PersistentVolumeClaim (PVC)",
+          NAME: "bind-pvc (대상 PV: bind-pv)",
+          SPEC: "PV의 capacity, accessMode, volumeMode, storageClassName을 읽어서 맞춤",
+          EVIDENCE: "kubectl get pvc bind-pvc -n storage-exam (STATUS: Bound, VOLUME: bind-pv)"
+        },
+        hint1: "먼저 `kubectl get pv bind-pv -o yaml`을 실행하여 capacity, accessModes, storageClassName 값을 확인하세요.",
+        hint2: "PV의 `storageClassName` 필드가 비어있다면, PVC manifest에 `storageClassName: \"\"`를 반드시 선언해야 합니다.",
+        yaml: `apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bind-pvc
+  namespace: storage-exam
+spec:
+  accessModes:
+    - ReadWriteOnce # bind-pv의 accessModes와 일치시킴
+  resources:
+    requests:
+      storage: 1Gi   # bind-pv의 capacity 이하
+  storageClassName: "" # PV에 클래스가 없을 때 필수 빈 문자열!`,
+        verifyCmd: "kubectl get pvc bind-pvc -n storage-exam"
+      },
+      {
+        id: 2,
+        title: "02. Helm 레포 등록 및 Chart Version 고정 배포",
+        domain: "Cluster Architecture",
+        timeLimit: "8분",
+        problem: "지정된 Helm 차트 저장소를 추가하고, 특정 Release 이름과 지정된 CHART VERSION으로 네임스페이스 `helm-exam`에 배포하시오.",
+        trap: "`helm search repo` 결과에서 보이는 `APP VERSION`과 `CHART VERSION`을 혼동하지 마세요. `--version` 플래그에는 반드시 `CHART VERSION`을 넣어야 합니다.",
+        searchWord: "helm.sh/docs ➔ helm install / using helm",
+        decode: {
+          WHERE: "지정된 호스트, namespace: helm-exam",
+          WHAT: "Helm Release",
+          NAME: "Release명: 지문 참조, Repo명: 지문 참조",
+          SPEC: "차트 버전 (--version <CHART_VERSION>)",
+          EVIDENCE: "helm list -n helm-exam (STATUS: deployed)"
+        },
+        hint1: "`helm repo add <name> <url>` 후 `helm repo update`를 실행하세요.",
+        hint2: "`helm search repo <repo>/<chart> --versions` 명령어로 사용 가능한 차트 버전 목록을 확인할 수 있습니다.",
+        yaml: `# 1. 레포 등록 및 갱신
+helm repo add myrepo https://example.com/charts
+helm repo update
+
+# 2. 버전 지정 설치 (APP VERSION이 아닌 CHART VERSION 사용!)
+helm install my-release myrepo/mychart --version 2.4.1 -n helm-exam`,
+        verifyCmd: "helm list -n helm-exam"
+      },
+      {
+        id: 3,
+        title: "03. CRD 필드와 subject 개념 구분 (RBAC & CSR)",
+        domain: "Cluster Architecture",
+        timeLimit: "8분",
+        problem: "CRD(CustomResourceDefinition) 생성 시 지문의 스키마를 만족하고, `subject`와 관련된 요구사항이 있다면 올바른 리소스(RoleBinding/CSR)에 구성하시오.",
+        trap: "CRD의 spec에는 `subject` 필드가 절대 존재하지 않습니다. User/Group/SA에 권한을 줄 때는 RoleBinding의 `subjects`이며, 인증서의 주체는 CSR의 `CN`/`O`입니다.",
+        searchWord: "customresourcedefinition, using rbac authorization",
+        decode: {
+          WHERE: "CRD: Cluster-wide / CR: 지정된 Namespace",
+          WHAT: "CustomResourceDefinition (apiextensions.k8s.io/v1)",
+          NAME: "<plural>.<group> (예: widgets.exam.example.com)",
+          SPEC: "group, versions, scope(Namespaced), names",
+          EVIDENCE: "kubectl get crd <name>"
+        },
+        hint1: "CRD 매니페스트에는 `subject`가 들어가지 않습니다. 공식 문서 CustomResourceDefinition 기본 템플릿을 복사하세요.",
+        hint2: "만약 지문이 권한(User/SA)을 언급한다면 RoleBinding의 `subjects` 배열을 확인하세요.",
+        yaml: `apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: widgets.exam.example.com
+spec:
+  group: exam.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+  scope: Namespaced
+  names:
+    plural: widgets
+    singular: widget
+    kind: Widget`,
+        verifyCmd: "kubectl get crd widgets.exam.example.com"
+      },
+      {
+        id: 4,
+        title: "04. Control-plane kube-apiserver 다운 트러블슈팅",
+        domain: "Troubleshooting",
+        timeLimit: "10분",
+        problem: "Control-plane 노드에서 kube-apiserver가 응답하지 않아 kubectl 명령이 동작하지 않는다. 원인을 파악하고 API를 정상 복구하시오.",
+        trap: "kube-apiserver는 systemd가 아닙니다! kubelet이 구동하는 Static Pod이므로 `/etc/kubernetes/manifests/kube-apiserver.yaml`을 직접 수정해야 합니다.",
+        searchWord: "troubleshoot clusters, static pod",
+        decode: {
+          WHERE: "Control-plane 노드",
+          WHAT: "Static Pod (kube-apiserver)",
+          NAME: "kube-apiserver",
+          SPEC: "포트, 인증서 경로, etcd 엔드포인트 오타 수정",
+          EVIDENCE: "kubectl get --raw='/readyz' 성공, kubectl get nodes 정상 출력"
+        },
+        hint1: "먼저 `systemctl status kubelet`으로 kubelet이 살아있는지 확인하세요.",
+        hint2: "`crictl ps -a | grep apiserver`로 컨테이너 ID를 찾은 후 `crictl logs <id>`로 종료 원인을 파악하세요.",
+        yaml: `# 점검 1. kubelet 상태 확인
+systemctl status kubelet
+
+# 점검 2. 컨테이너 레벨 로그 확인
+crictl ps -a | grep apiserver
+crictl logs <container-id>
+
+# 점검 3. Static Pod 매니페스트 오타 수정
+vi /etc/kubernetes/manifests/kube-apiserver.yaml`,
+        verifyCmd: "kubectl get --raw='/readyz' && kubectl get nodes"
+      },
+      {
+        id: 5,
+        title: "05. Deployment HPA: CPU 50%, scaleDown window 30초",
+        domain: "Workloads / Autoscaling",
+        timeLimit: "8분",
+        problem: "Deployment `app-deploy`에 HPA를 연결하여 CPU 목표 50%, minReplicas 1, maxReplicas 5, scaleDown stabilizationWindowSeconds 30초를 구성하시오.",
+        trap: "HPA 대상 Deployment의 컨테이너에 `resources.requests.cpu`가 설정되어 있지 않으면 HPA는 CPU 사용률을 절대 측정할 수 없습니다(unknown 상태).",
+        searchWord: "horizontal pod autoscaler",
+        decode: {
+          WHERE: "지정된 namespace (예: hpa-exam)",
+          WHAT: "HorizontalPodAutoscaler (autoscaling/v2)",
+          NAME: "app-hpa",
+          SPEC: "scaleTargetRef: app-deploy, CPU 50%, min 1, max 5, scaleDown window 30s",
+          EVIDENCE: "kubectl describe hpa app-hpa -n hpa-exam"
+        },
+        hint1: "Deployment `app-deploy`를 describe하여 컨테이너에 cpu request가 있는지 먼저 확인하세요.",
+        hint2: "HPA v2 매니페스트에서 `behavior.scaleDown.stabilizationWindowSeconds: 30`을 추가합니다.",
+        yaml: `apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-hpa
+  namespace: hpa-exam
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-deploy
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30`,
+        verifyCmd: "kubectl describe hpa app-hpa -n hpa-exam"
+      },
+      {
+        id: 6,
+        title: "06. env 로그 경로 컨테이너에 로깅 사이드카 추가",
+        domain: "Troubleshooting / Workloads",
+        timeLimit: "8분",
+        problem: "기존 모니터링 컨테이너가 env에 지정된 파일 경로로 남기는 로그를 `kubectl logs`로 조회할 수 있도록 사이드카 컨테이너를 추가하시오.",
+        trap: "Deployment YAML을 수정할 때 containers와 volumes는 반드시 `spec.template.spec` 아래에 위치해야 합니다. `spec` 바로 아래에 두면 `unknown field` 에러가 납니다.",
+        searchWord: "logging architecture ➔ emptyDir",
+        decode: {
+          WHERE: "namespace: log-exam, Deployment: monitor-app",
+          WHAT: "Sidecar container (busybox:1.28) + shared emptyDir",
+          NAME: "sidecar: log-sidecar",
+          SPEC: "emptyDir 공유 볼륨 마운트, tail -n+1 -F <log-path>",
+          EVIDENCE: "kubectl -n log-exam logs deploy/monitor-app -c log-sidecar 출력"
+        },
+        hint1: "기존 컨테이너의 env(예: LOG_FILE)를 확인하여 어떤 디렉터리에 파일이 저장되는지 찾으세요.",
+        hint2: "기존 컨테이너와 사이드카 컨테이너 모두에 동일한 `emptyDir: {}` volume을 마운트하세요.",
+        yaml: `spec:
+  template:
+    spec:
+      containers:
+      - name: monitor
+        # 기존 컨테이너 설정 유지...
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/monitor
+      - name: log-sidecar
+        image: busybox:1.28
+        args: [/bin/sh, -c, 'tail -n+1 -F /var/log/monitor/monitor.log']
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/monitor
+      volumes:
+      - name: shared-logs
+        emptyDir: {}`,
+        verifyCmd: "kubectl -n log-exam logs deploy/monitor-app -c log-sidecar"
+      }
+    ];
+
+    // --- Data: Flashcards ---
+    const flashcardsData = [
+      {
+        cat: "troubleshoot",
+        catName: "트러블슈팅",
+        q: "kube-apiserver가 응답하지 않을 때 systemctl restart kube-apiserver로 재시작할 수 있는가?",
+        verdict: "❌ 불가능! (X)",
+        a: "kube-apiserver는 systemd 서비스가 아닌 kubelet이 관리하는 Static Pod입니다. /etc/kubernetes/manifests/kube-apiserver.yaml 또는 crictl ps/logs로 확인해야 합니다.",
+        tip: "Static pod 매니페스트를 수정하면 kubelet이 파일 변경을 감지하고 자동으로 재기동합니다."
+      },
+      {
+        cat: "troubleshoot",
+        catName: "트러블슈팅",
+        q: "Node가 NotReady 상태일 때 가장 먼저 확인해야 할 호스트 서비스는?",
+        verdict: "✅ systemctl status kubelet",
+        a: "Kubelet 서비스 상태와 journalctl -u kubelet -xe 로그를 먼저 확인합니다. 그다음 /etc/cni/net.d/의 CNI 설정 유무를 점검합니다.",
+        tip: "kubelet이 active 상태인지, 설정 파일에 오타가 없는지가 1순위입니다."
+      },
+      {
+        cat: "troubleshoot",
+        catName: "트러블슈팅",
+        q: "Deployment에 사이드카 컨테이너와 volumes를 추가할 때 올바른 YAML 계층 경로는?",
+        verdict: "✅ spec.template.spec",
+        a: "많은 수험생이 spec.containers 또는 spec.volumes로 작성하여 긴 unknown field 에러를 겪습니다. 반드시 Pod 템플릿(template.spec) 아래에 넣어야 합니다.",
+        tip: "kubectl explain deploy.spec.template.spec.containers 로 필드를 확인하세요."
+      },
+      {
+        cat: "troubleshoot",
+        catName: "트러블슈팅",
+        q: "컨테이너가 CrashLoopBackOff로 재시작되어 로그가 비어있을 때 이전 실행 로그를 보는 플래그는?",
+        verdict: "✅ kubectl logs <pod> --previous",
+        a: "`--previous` (또는 `-p`) 플래그를 사용하면 직전에 비정상 종료된 컨테이너의 stdout/stderr 로그를 조회할 수 있습니다.",
+        tip: "추가로 kubectl describe pod로 Terminated State의 Exit Code를 확인합니다."
+      },
+      {
+        cat: "architecture",
+        catName: "아키텍처",
+        q: "CRD(CustomResourceDefinition) spec에 사용자(User)나 SA의 권한을 지정하는 'subject' 필드가 있는가?",
+        verdict: "❌ 없다! (X)",
+        a: "CRD는 리소스의 스키마와 종류(Kind)를 정의하는 리소스입니다. subject는 RBAC RoleBinding의 대상이거나 CSR의 클라이언트 인증서 subject입니다.",
+        tip: "CRD에 subject를 넣으려다 시간을 낭비하는 것이 CKA 단골 오개념입니다."
+      },
+      {
+        cat: "architecture",
+        catName: "아키텍처",
+        q: "etcd snapshot restore 후 반드시 확인/수정해야 하는 정적 파드 설정은?",
+        verdict: "✅ /etc/kubernetes/manifests/etcd.yaml 의 hostPath",
+        a: "복원 시 지정한 새 data-dir(예: /var/lib/etcd-new)로 etcd static pod 매니페스트의 hostPath volume 경로를 일치시켜야 실제 복원 데이터가 로드됩니다.",
+        tip: "복원 명령어만 치고 manifest를 안 고치면 이전 데이터베이스를 계속 읽습니다."
+      },
+      {
+        cat: "architecture",
+        catName: "아키텍처",
+        q: "Helm install 시 지문에 주어진 버전을 넣을 때 주의해야 할 점은?",
+        verdict: "✅ APP VERSION이 아닌 CHART VERSION 사용",
+        a: "`helm search repo <chart> --versions` 출력 결과에서 APP VERSION과 CHART VERSION은 다릅니다. `--version` 플래그에는 반드시 CHART VERSION을 넘겨야 합니다.",
+        tip: "예: helm install app repo/app --version 1.5.0"
+      },
+      {
+        cat: "architecture",
+        catName: "아키텍처",
+        q: "kubeadm 클러스터 업그레이드 시 control-plane 노드를 drain하기 위한 플래그는?",
+        verdict: "✅ kubectl drain <node> --ignore-daemonsets",
+        a: "DaemonSet 파드는 drain 시 기본적으로 거부되므로 `--ignore-daemonsets` 플래그를 필수로 함께 전달해야 정상 drain됩니다.",
+        tip: "local data가 있다면 --delete-emptydir-data 도 필요할 수 있습니다."
+      },
+      {
+        cat: "network",
+        catName: "네트워킹",
+        q: "특정 파드(Pod)의 클러스터 내부 도메인(DNS) 주소 형식은?",
+        verdict: "✅ <ip-with-dashes>.<ns>.pod.cluster.local",
+        a: "Pod 이름이 들어가지 않습니다! IP가 10.244.1.5이고 ns가 prod라면 `10-244-1-5.prod.pod.cluster.local` 입니다.",
+        tip: "Service는 <svc-name>.<ns>.svc.cluster.local 이지만 Pod은 IP dash 형식입니다."
+      },
+      {
+        cat: "network",
+        catName: "네트워킹",
+        q: "Service를 생성했는데 kubectl get ep 에서 엔드포인트가 비어있는 1순위 원인은?",
+        verdict: "✅ Service Selector와 Pod Labels의 불일치",
+        a: "서비스의 `spec.selector`와 타깃 Pod의 `metadata.labels`가 단 1글자라도 다르면 엔드포인트가 매핑되지 않아 트래픽이 유실됩니다.",
+        tip: "kubectl get pods --show-labels 와 kubectl describe svc <name>을 대조하세요."
+      },
+      {
+        cat: "network",
+        catName: "네트워킹",
+        q: "Ingress v1 (networking.k8s.io/v1) 매니페스트에서 누락하면 안 되는 필수 필드 2가지는?",
+        verdict: "✅ spec.ingressClassName & paths[].pathType",
+        a: "`ingressClassName`(예: nginx)과 `pathType: Prefix` (또는 Exact)를 필수로 지정해야 최신 인그레스 컨트롤러에서 처리됩니다.",
+        tip: "v1beta1 시절 문법(serviceName, servicePort)을 쓰면 API 유효성 검사 에러가 발생합니다."
+      },
+      {
+        cat: "storage",
+        catName: "스토리지",
+        q: "클러스터에 있는 PV에 storageClassName이 없을 때, PVC가 바인딩되려면 PVC에 무엇을 선언해야 하는가?",
+        verdict: "✅ storageClassName: \"\"",
+        a: "PVC에 아무것도 안 적으면 클러스터의 Default StorageClass가 자동 부여되어 PV와 클래스가 달라 Bound되지 않습니다. 반드시 빈 문자열(\"\")을 명시해야 합니다.",
+        tip: "PV는 클러스터 스코프, PVC는 네임스페이스 스코프입니다."
+      },
+      {
+        cat: "storage",
+        catName: "워크로드",
+        q: "HPA(HorizontalPodAutoscaler)가 파드의 CPU 사용률 50%를 계산하지 못하고 unknown일 때 원인은?",
+        verdict: "✅ 대상 Deployment에 resources.requests.cpu 누락",
+        a: "HPA는 `(실제 사용량 / 요청량) * 100`으로 백분율을 구하므로, 컨테이너에 `requests.cpu`가 없으면 기준값이 없어 백분율을 계산할 수 없습니다.",
+        tip: "Deployment yaml의 spec.template.spec.containers[].resources.requests.cpu를 확인하세요."
+      }
+    ];
+
+    // --- Data: Cheatsheet ---
+    const cheatsheetData = [
+      {
+        title: "1. 필수 Pod & Deployment Imperative 원라이너",
+        items: [
+          { cmd: "k run nginx-pod --image=nginx $do > pod.yaml", desc: "Pod 기본 YAML 추출" },
+          { cmd: "k create deployment my-deploy --image=nginx --replicas=3 $do > dep.yaml", desc: "Deployment 기본 YAML 추출" },
+          { cmd: "k set image deployment/my-deploy nginx=nginx:1.25.0 --record", desc: "Deployment 이미지 롤링 업데이트" },
+          { cmd: "k scale deployment/my-deploy --replicas=5", desc: "Replica 수 즉시 조정" }
+        ]
+      },
+      {
+        title: "2. Service 노출 및 엔드포인트 확인",
+        items: [
+          { cmd: "k expose deployment my-deploy --name=my-svc --port=80 --target-port=80 --type=ClusterIP", desc: "ClusterIP 서비스 즉시 노출" },
+          { cmd: "k get endpoints my-svc -n <ns>", desc: "서비스 타깃 엔드포인트 IP 바인딩 확인" },
+          { cmd: "k run test-curl --rm -it --image=busybox:1.28 --restart=Never -- wget -qO- my-svc", desc: "클러스터 내부에서 서비스 접근 테스트" }
+        ]
+      },
+      {
+        title: "3. RBAC (ServiceAccount, Role, RoleBinding, Can-i)",
+        items: [
+          { cmd: "k create sa app-sa -n prod", desc: "ServiceAccount 생성" },
+          { cmd: "k create role pod-reader --verb=get,list,watch --resource=pods -n prod", desc: "Role 생성" },
+          { cmd: "k create rolebinding pod-reader-rb --role=pod-reader --serviceaccount=prod:app-sa -n prod", desc: "RoleBinding 생성" },
+          { cmd: "k auth can-i get pods -n prod --as=system:serviceaccount:prod:app-sa", desc: "권한 위임 정상 동작 여부 즉시 검증 (yes/no)" }
+        ]
+      },
+      {
+        title: "4. 트러블슈팅 및 리소스 필터링 (JSONPath / Node)",
+        items: [
+          { cmd: "k get nodes -o custom-columns=NAME:.metadata.name,STATUS:.status.conditions[-1].type", desc: "노드 이름 및 최종 상태 열 출력" },
+          { cmd: "k top pods -A --sort-by=cpu", desc: "클러스터 전체 CPU 최상위 Pod 정렬" },
+          { cmd: "k get pods -A --field-selector=status.phase!=Running", desc: "정상 러닝 상태가 아닌 비정상 Pod 전체 필터링" },
+          { cmd: "crictl ps -a | grep <name>", desc: "Worker 노드에서 containerd 컨테이너 검색" }
+        ]
+      }
+    ];
+
+    // --- State Variables ---
+    let currentTab = 'dashboard';
+    let currentFcIndex = 0;
+    let filteredFlashcards = [...flashcardsData];
+    let isFlipped = false;
+
+    // --- Tab Switcher Logic ---
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeSec = document.getElementById(`sec-${tabId}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      // Desktop Tab Active Styles
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('text-slate-400');
+      });
+      const activeDeskBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeDeskBtn) {
+        activeDeskBtn.classList.remove('text-slate-400');
+        activeDeskBtn.classList.add('bg-blue-600', 'text-white');
+      }
+
+      // Mobile Bottom Nav Active Styles
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        btn.classList.remove('text-blue-500');
+        btn.classList.add('text-slate-400');
+      });
+      const activeMobBtn = document.getElementById(`m-tab-btn-${tabId}`);
+      if (activeMobBtn) {
+        activeMobBtn.classList.remove('text-slate-400');
+        activeMobBtn.classList.add('text-blue-500');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- Render Exam-01 Questions ---
+    function renderExamQuestions() {
+      const container = document.getElementById('examQuestionsContainer');
+      container.innerHTML = examQuestions.map(q => `
+        <div class="bg-slate-800/90 rounded-xl border border-slate-700/80 p-5 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-blue-600/30 text-blue-400 font-bold text-xs flex items-center justify-center border border-blue-500/30">#${q.id}</span>
+              <h3 class="font-bold text-white text-base">${q.title}</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">${q.domain}</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-medium">${q.timeLimit}</span>
+            </div>
+          </div>
+
+          <!-- Problem & Trap Box -->
+          <div class="space-y-2">
+            <p class="text-sm text-slate-200 leading-relaxed font-medium">${q.problem}</p>
+            <div class="p-3 bg-rose-950/40 rounded-lg border border-rose-900/60 text-xs text-rose-300 space-y-1">
+              <div class="font-bold flex items-center gap-1.5"><i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-400"></i> 단골 함정 및 주의점</div>
+              <div class="text-slate-300 leading-relaxed">${q.trap}</div>
+            </div>
+          </div>
+
+          <!-- 60s Decode Box -->
+          <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 text-xs grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div><span class="text-slate-500 block text-[10px]">WHERE</span><span class="text-slate-200 font-mono">${q.decode.WHERE}</span></div>
+            <div><span class="text-slate-500 block text-[10px]">WHAT</span><span class="text-slate-200 font-mono">${q.decode.WHAT}</span></div>
+            <div><span class="text-slate-500 block text-[10px]">NAME</span><span class="text-blue-300 font-mono">${q.decode.NAME}</span></div>
+            <div class="col-span-2 sm:col-span-3"><span class="text-slate-500 block text-[10px]">EVIDENCE</span><span class="text-emerald-400 font-mono">${q.decode.EVIDENCE}</span></div>
+          </div>
+
+          <!-- Interactive Actions (Hints & Solution Toggle) -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="toggleHint('hint1-${q.id}')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-700/80 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5 transition">
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-blue-400"></i> 1차 힌트
+            </button>
+            <button onclick="toggleHint('hint2-${q.id}')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-700/80 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5 transition">
+              <i data-lucide="compass" class="w-3.5 h-3.5 text-purple-400"></i> 2차 힌트
+            </button>
+            <button onclick="toggleHint('sol-${q.id}')" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 transition ml-auto">
+              <i data-lucide="file-check" class="w-3.5 h-3.5"></i> 모범 답안 & 검증 보기
+            </button>
+          </div>
+
+          <!-- Collapsible Hint 1 -->
+          <div id="hint1-${q.id}" class="hidden p-3 rounded-lg bg-blue-950/50 border border-blue-900/60 text-xs text-blue-200">
+            <strong>💡 1차 힌트:</strong> ${q.hint1}
+          </div>
+
+          <!-- Collapsible Hint 2 -->
+          <div id="hint2-${q.id}" class="hidden p-3 rounded-lg bg-purple-950/50 border border-purple-900/60 text-xs text-purple-200">
+            <strong>🔍 2차 힌트:</strong> ${q.hint2}
+          </div>
+
+          <!-- Collapsible Model Solution -->
+          <div id="sol-${q.id}" class="hidden space-y-3 pt-2">
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-emerald-400 font-mono font-medium">YAML / 배포 명령어</span>
+                <button onclick="copyCode(this)" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1 transition">
+                  <i data-lucide="copy" class="w-3 h-3"></i> 복사
+                </button>
+              </div>
+              <pre class="text-xs font-mono text-slate-200 overflow-x-auto p-2 bg-slate-900 rounded"><code>${q.yaml}</code></pre>
+            </div>
+
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+              <div class="space-y-0.5">
+                <span class="text-slate-400 block text-[11px]">검증 명령어 (Evidence Check):</span>
+                <code class="text-emerald-400 font-mono">${q.verifyCmd}</code>
+              </div>
+              <button onclick="copyText('${q.verifyCmd}')" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs">복사</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleHint(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    // --- Render Flashcard Logic ---
+    function updateFlashcardUI() {
+      if (filteredFlashcards.length === 0) return;
+      const card = filteredFlashcards[currentFcIndex];
+      document.getElementById('fcCategoryBadge').innerText = card.catName;
+      document.getElementById('fcCounter').innerText = `${currentFcIndex + 1} / ${filteredFlashcards.length}`;
+      document.getElementById('fcQuestion').innerText = card.q;
+      document.getElementById('fcVerdict').innerText = card.verdict;
+      document.getElementById('fcAnswer').innerHTML = card.a;
+      document.getElementById('fcTip').innerText = `💡 ${card.tip}`;
+
+      // Reset flip to front
+      isFlipped = false;
+      document.getElementById('flashcardInner').classList.remove('rotate-y-180');
+      lucide.createIcons();
+    }
+
+    function flipFlashcard(event) {
+      if (event) event.stopPropagation();
+      isFlipped = !isFlipped;
+      const inner = document.getElementById('flashcardInner');
+      if (isFlipped) inner.classList.add('rotate-y-180');
+      else inner.classList.remove('rotate-y-180');
+    }
+
+    function nextFlashcard(event) {
+      if (event) event.stopPropagation();
+      currentFcIndex = (currentFcIndex + 1) % filteredFlashcards.length;
+      updateFlashcardUI();
+    }
+
+    function prevFlashcard(event) {
+      if (event) event.stopPropagation();
+      currentFcIndex = (currentFcIndex - 1 + filteredFlashcards.length) % filteredFlashcards.length;
+      updateFlashcardUI();
+    }
+
+    function shuffleFlashcards() {
+      filteredFlashcards.sort(() => Math.random() - 0.5);
+      currentFcIndex = 0;
+      updateFlashcardUI();
+      showToast("플래시카드가 랜덤으로 섞였습니다!");
+    }
+
+    function filterFlashcards(category) {
+      document.querySelectorAll('.fc-filter-btn').forEach(b => {
+        if (b.dataset.cat === category) {
+          b.classList.remove('bg-slate-800', 'text-slate-400');
+          b.classList.add('bg-blue-600', 'text-white');
+        } else {
+          b.classList.remove('bg-blue-600', 'text-white');
+          b.classList.add('bg-slate-800', 'text-slate-400');
+        }
+      });
+
+      if (category === 'all') {
+        filteredFlashcards = [...flashcardsData];
+      } else {
+        filteredFlashcards = flashcardsData.filter(c => c.cat === category);
+      }
+      currentFcIndex = 0;
+      updateFlashcardUI();
+    }
+
+    // --- Render Cheatsheet Logic ---
+    function renderCheatsheet() {
+      const container = document.getElementById('cheatsheetList');
+      container.innerHTML = cheatsheetData.map(group => `
+        <div class="bg-slate-800/90 rounded-xl border border-slate-700/80 p-4 space-y-2.5">
+          <h4 class="font-bold text-sm text-white">${group.title}</h4>
+          <div class="space-y-2">
+            ${group.items.map(item => `
+              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="space-y-0.5">
+                  <div class="text-[11px] text-slate-400">${item.desc}</div>
+                  <code class="text-xs text-emerald-400 font-mono">${item.cmd}</code>
+                </div>
+                <button onclick="copyText('${item.cmd.replace(/"/g, '&quot;')}')" class="self-end sm:self-auto px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded transition flex items-center gap-1">
+                  <i data-lucide="copy" class="w-3 h-3"></i> 복사
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Clipboard Utility ---
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("클립보드에 복사되었습니다!");
+      });
+    }
+
+    function copyCode(btn) {
+      const codeBlock = btn.closest('.bg-slate-950').querySelector('code');
+      if (codeBlock) {
+        copyText(codeBlock.innerText);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.remove('opacity-0');
+      setTimeout(() => toast.classList.add('opacity-0'), 2000);
+    }
+
+    // --- Theme Toggle ---
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // --- Init on Window Load ---
+    window.addEventListener('DOMContentLoaded', () => {
+      renderExamQuestions();
+      renderCheatsheet();
+      updateFlashcardUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
