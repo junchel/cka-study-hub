@@ -83,6 +83,9 @@
 
     <!-- Desktop Navigation Tabs -->
     <div class="max-w-6xl mx-auto hidden md:flex items-center gap-1 mt-3 border-t border-slate-800/80 pt-2 overflow-x-auto no-scrollbar">
+      <button onclick="switchTab('d2final')" id="tab-btn-d2final" class="nav-tab px-3 py-1.5 rounded-lg text-sm font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white shrink-0 shadow-lg shadow-rose-600/30">
+        <i data-lucide="zap" class="w-4 h-4 text-amber-300 animate-pulse"></i> 🚨 D-2 파이널 키트
+      </button>
       <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 bg-blue-600 text-white shrink-0">
         <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 대시보드
       </button>
@@ -122,8 +125,390 @@
       <div id="searchResultsList" class="space-y-2 text-xs max-h-72 overflow-y-auto custom-scrollbar"></div>
     </div>
 
+    <!-- 0. D-2 FINAL TAB -->
+    <section id="sec-d2final" class="tab-content hidden space-y-6">
+      
+      <!-- Top Alert Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-950/90 via-slate-900 to-amber-950/80 border-2 border-rose-500/60 p-5 md:p-6 shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-black border border-rose-500/40">
+              <i data-lucide="alert-octagon" class="w-4 h-4 text-rose-400 animate-pulse"></i>
+              D-2 시험 직전 파이널 생존 키트
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white">"새로운 지식 금지! 실수 0점 방지 + 고배점 7대 유형 기계적 작성"</h2>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+              남은 48시간의 합격 전략: <strong>사소한 실수로 인한 0점(Context/Namespace 누락)을 원천 차단</strong>하고,
+              <strong>시험에 무조건 나오는 고배점 7대 유형(합산 배점 50%+)을 기계처럼 1분 안에 작성</strong>하는 것입니다.
+            </p>
+          </div>
+          <div class="px-4 py-3 rounded-xl bg-slate-900/90 border border-amber-500/40 text-center shrink-0">
+            <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Status</div>
+            <div class="text-2xl font-black text-white">D-2 직전</div>
+            <div class="text-[11px] text-emerald-400 font-semibold">합격 확정 모드</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Zero-Point Prevention: 4 Golden Rules -->
+      <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-5 space-y-4">
+        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="shield-alert" class="w-5 h-5 text-rose-400"></i>
+          1. 시험장 0점 처리 방지 4대 철칙 (최다 탈락 원인 1위)
+        </h3>
+        <p class="text-xs text-slate-400">실제 시험에서 문제를 맞게 풀고도 0점 처리되는 이유는 실력이 아니라 아래 사소한 실수 때문입니다.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="bg-slate-900/80 p-3.5 rounded-xl border border-rose-900/40 space-y-1.5">
+            <div class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+              <span>① Context 전환 확인 (무조건 첫 번째 실행!)</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              각 문제 지문 상단에 적힌 <code class="text-rose-300 font-mono">kubectl config use-context &lt;name&gt;</code>를 가장 먼저 복사/실행하세요. 이전 문제 클러스터에서 작업하면 0점입니다.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/80 p-3.5 rounded-xl border border-amber-900/40 space-y-1.5">
+            <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <span>② Namespace 명시 (`-n &lt;ns&gt;`)</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              지문에 네임스페이스가 지정되어 있다면 모든 명령에 <code class="text-amber-300 font-mono">-n &lt;ns&gt;</code>를 붙이세요. default에 잘못 만들면 채점기가 인식하지 못합니다.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/80 p-3.5 rounded-xl border border-blue-900/40 space-y-1.5">
+            <div class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+              <span>③ 파일 저장 경로 &amp; 오타 더블 체크</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "save to /root/CKA/result.txt" 문제에서 파일 경로 오타나 불필요한 kubectl 헤더가 포함되면 감점됩니다. 반드시 <code class="text-blue-300 font-mono">cat &lt;file&gt;</code>로 점검하세요.
+            </p>
+          </div>
+
+          <div class="bg-slate-900/80 p-3.5 rounded-xl border border-purple-900/40 space-y-1.5">
+            <div class="text-xs font-bold text-purple-400 flex items-center gap-1.5">
+              <span>④ 8분 룰 (안 풀리면 Flag 찍고 넘어가기)</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              한 문제에 8분이 지났는데 막혔다면 미련 없이 <strong>Flag 찍고 다음 문제로</strong> 가세요. 뒤에 1분 컷으로 풀 수 있는 쉬운 Pod/Deployment 문제가 기다립니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. High-Yield Top 7 Templates (1-Minute Copy) -->
+      <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-3">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="check-check" class="w-5 h-5 text-emerald-400"></i>
+              2. 무조건 출제되는 고배점 정형화 문제 7선 (배점 50%+)
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">이 7가지만 기계처럼 작성하면 합격선(66%)의 70% 이상을 바로 확보합니다.</p>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 font-bold self-start sm:self-auto border border-emerald-500/30">1분 컷 템플릿</span>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Item 1: etcd -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-cyan-300">① etcd 스냅샷 백업 &amp; 복원 (배점 ~7%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code># 1. 백업
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /root/etcd-backup.db
+
+# 2. 복원 (새 디렉터리)
+ETCDCTL_API=3 etcdctl --data-dir=/var/lib/etcd-from-backup snapshot restore /root/etcd-backup.db
+
+# 3. /etc/kubernetes/manifests/etcd.yaml 의 hostPath를 /var/lib/etcd-from-backup 으로 수정!</code></pre>
+          </div>
+
+          <!-- Item 2: kubeadm -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-emerald-300">② kubeadm 클러스터 업그레이드 (배점 ~9%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code># Control-plane 노드
+kubectl drain &lt;cp-node&gt; --ignore-daemonsets
+apt-mark unhold kubeadm &amp;&amp; apt-get install -y kubeadm=1.xx.x-1.1 &amp;&amp; apt-mark hold kubeadm
+kubeadm upgrade plan &amp;&amp; kubeadm upgrade apply v1.xx.x
+apt-mark unhold kubelet kubectl &amp;&amp; apt-get install -y kubelet=1.xx.x-1.1 kubectl=1.xx.x-1.1 &amp;&amp; apt-mark hold kubelet kubectl
+systemctl daemon-reload &amp;&amp; systemctl restart kubelet
+kubectl uncordon &lt;cp-node&gt;
+
+# Worker 노드
+kubectl drain &lt;worker&gt; --ignore-daemonsets
+apt-mark unhold kubeadm &amp;&amp; apt-get install -y kubeadm=1.xx.x-1.1 &amp;&amp; apt-mark hold kubeadm
+kubeadm upgrade node
+apt-mark unhold kubelet &amp;&amp; apt-get install -y kubelet=1.xx.x-1.1 &amp;&amp; apt-mark hold kubelet
+systemctl daemon-reload &amp;&amp; systemctl restart kubelet
+kubectl uncordon &lt;worker&gt;</code></pre>
+          </div>
+
+          <!-- Item 3: Node NotReady -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-amber-300">③ Node NotReady 트러블슈팅 (배점 ~8%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code>kubectl describe node &lt;node&gt; # 원인 확인
+ssh &lt;node&gt;
+systemctl status kubelet
+journalctl -u kubelet -xe --no-pager -n 50 # 에러 파악
+ls -la /etc/cni/net.d/ # CNI 설정 파일 부재 또는 오타 확인
+systemctl restart kubelet
+exit
+kubectl get nodes # Ready 확인</code></pre>
+          </div>
+
+          <!-- Item 4: kube-apiserver -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-rose-300">④ kube-apiserver Static Pod 다운 복구 (배점 ~8%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code>systemctl status kubelet # kubelet 생존 여부 확인
+crictl ps -a | grep apiserver # 종료된 컨테이너 ID 확인
+crictl logs &lt;container-id&gt; # 구체적 종료 로그 확인
+vi /etc/kubernetes/manifests/kube-apiserver.yaml # 오타/인증서/etcd 포트 수정
+kubectl get --raw='/readyz' # 복구 검증</code></pre>
+          </div>
+
+          <!-- Item 5: RBAC -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-indigo-300">⑤ RBAC 원라이너 + 즉시 검증 (배점 ~6%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code>kubectl create sa app-sa -n prod
+kubectl create role app-role --verb=get,list,watch --resource=pods,secrets -n prod
+kubectl create rolebinding app-rb --role=app-role --serviceaccount=prod:app-sa -n prod
+kubectl auth can-i get pods -n prod --as=system:serviceaccount:prod:app-sa # 출력: yes 확인!</code></pre>
+          </div>
+
+          <!-- Item 6: Ingress -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-blue-300">⑥ Ingress v1 구성 (배점 ~6%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: prod
+spec:
+  ingressClassName: nginx   # 필수!
+  rules:
+  - host: myapp.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix    # 필수!
+        backend:
+          service:
+            name: my-svc
+            port:
+              number: 80</code></pre>
+          </div>
+
+          <!-- Item 7: NetworkPolicy -->
+          <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 min-w-0">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-xs sm:text-sm text-purple-300">⑦ NetworkPolicy 트래픽 격리 (배점 ~6%)</h4>
+              <button onclick="copyCode(this)" class="px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 복사</button>
+            </div>
+            <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-2.5 bg-slate-950 rounded break-all"><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-netpol
+  namespace: prod
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          team: backend
+      podSelector:
+        matchLabels:
+          app: api
+    ports:
+    - protocol: TCP
+      port: 3306</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PSI Docs Pinpoint Search Map -->
+      <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-5 space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="compass" class="w-5 h-5 text-indigo-400"></i>
+          3. 공식 문서 15초 핀포인트 복사 지도 (Search Map)
+        </h3>
+        <p class="text-xs text-slate-400">시험 브라우저에서 아래 검색어를 치고 해당 페이지의 예제를 복사하세요.</p>
+        
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-xs text-left text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px]">
+              <tr>
+                <th class="p-2.5 rounded-l">문제 주제</th>
+                <th class="p-2.5">검색창 입력어</th>
+                <th class="p-2.5">클릭할 공식 문서 페이지</th>
+                <th class="p-2.5 rounded-r">복사할 위치</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 font-mono">
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">HPA</td>
+                <td class="p-2.5 text-cyan-300">horizontal pod autoscaler</td>
+                <td class="p-2.5 text-slate-300 font-sans">Horizontal Pod Autoscaler</td>
+                <td class="p-2.5 text-emerald-400">autoscaling/v2 YAML</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">PV / PVC</td>
+                <td class="p-2.5 text-cyan-300">configure a pod to use a persistentvolume</td>
+                <td class="p-2.5 text-slate-300 font-sans">Configure a Pod to Use...</td>
+                <td class="p-2.5 text-emerald-400">PV, PVC 매니페스트</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">Ingress</td>
+                <td class="p-2.5 text-cyan-300">ingress</td>
+                <td class="p-2.5 text-slate-300 font-sans">Ingress</td>
+                <td class="p-2.5 text-emerald-400">networking.k8s.io/v1 Ingress</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">NetworkPolicy</td>
+                <td class="p-2.5 text-cyan-300">network policies</td>
+                <td class="p-2.5 text-slate-300 font-sans">Network Policies</td>
+                <td class="p-2.5 text-emerald-400">Default deny / Ingress 예시</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">Gateway API</td>
+                <td class="p-2.5 text-cyan-300">gateway-api.sigs.k8s.io</td>
+                <td class="p-2.5 text-slate-300 font-sans">HTTPRoute</td>
+                <td class="p-2.5 text-emerald-400">HTTPRoute 기본 spec</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">로깅 사이드카</td>
+                <td class="p-2.5 text-cyan-300">logging architecture</td>
+                <td class="p-2.5 text-slate-300 font-sans">Logging Architecture</td>
+                <td class="p-2.5 text-emerald-400">Two containers emptyDir</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">etcd 백업/복원</td>
+                <td class="p-2.5 text-cyan-300">operating etcd clusters</td>
+                <td class="p-2.5 text-slate-300 font-sans">Operating etcd clusters...</td>
+                <td class="p-2.5 text-emerald-400">snapshot save/restore CLI</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-sans font-bold">kubeadm 업그레이드</td>
+                <td class="p-2.5 text-cyan-300">upgrading kubeadm clusters</td>
+                <td class="p-2.5 text-slate-300 font-sans">Upgrading kubeadm clusters</td>
+                <td class="p-2.5 text-emerald-400">apt install &amp; upgrade apply</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. Terminal 30-Second Setup -->
+      <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="zap" class="w-5 h-5 text-amber-400"></i>
+            4. 시험 시작 30초 터미널 세팅 (원클릭 복사)
+          </h3>
+          <button onclick="copyCode(this)" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> 전체 복사</button>
+        </div>
+        <pre class="text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar p-3 bg-slate-950 rounded break-all"><code>alias k=kubectl
+export do="--dry-run=client -o yaml"
+export now="--force --grace-period=0"
+
+cat <<EOF > ~/.vimrc
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set number
+EOF</code></pre>
+      </div>
+
+      <!-- 5. D-2 / D-1 / D-Day Action Plan -->
+      <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-5 space-y-4">
+        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="calendar" class="w-5 h-5 text-blue-400"></i>
+          5. D-2 ➔ D-Day 실전 행동 계획
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="text-xs font-bold text-rose-400 flex items-center gap-1">
+              <span>[D-2 오늘 밤] 멘탈 &amp; 복습</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              • 본 D-2 파이널 체크리스트 정독<br>
+              • 고배점 7대 유형 템플릿 손으로 시뮬레이션<br>
+              • 출퇴근 플래시카드 ⭐ 헷갈린 카드 1회독
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="text-xs font-bold text-amber-400 flex items-center gap-1">
+              <span>[D-1 내일] 속도전 &amp; 환경 점검</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              • [5분 미니 퀴즈] 3회 반복 (10/10 목표)<br>
+              • 1회차 복기 6문제 YAML 작성 연습<br>
+              • 웹캠, 마이크, 신분증(여권/주민증), 조용한 방 확인<br>
+              • 밤 11시 전 조기 취침
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+              <span>[D-Day 시험 당일]</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              • 30분 전 따뜻한 물 마시고 화장실<br>
+              • 시작 30초: alias k=kubectl 세팅<br>
+              • 문제마다: Context 확인 ➔ Namespace 확인<br>
+              • 8분 넘어가면 즉시 Flag 후 Pass!
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
     <!-- 1. DASHBOARD TAB -->
     <section id="sec-dashboard" class="tab-content space-y-6">
+
+      <!-- D-2 Urgent Banner in Dashboard -->
+      <div onclick="switchTab('d2final')" class="cursor-pointer p-4 rounded-xl bg-gradient-to-r from-rose-950/80 via-amber-950/40 to-slate-800 border-2 border-amber-500/60 shadow-lg hover:border-amber-400 transition flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
+            <i data-lucide="zap" class="w-5 h-5 text-amber-400 animate-pulse"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-500 text-white font-black">D-2 직전 특강</span>
+              <span class="text-xs text-amber-300 font-bold">시험 2일 전 합격 파이널 키트 오픈!</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-0.5">0점 방지 4대 철칙, 무조건 나오는 7대 고배점 템플릿, 15초 문서 핀포인트 검색 맵</p>
+          </div>
+        </div>
+        <div class="hidden sm:flex items-center gap-1 text-xs text-amber-300 font-bold shrink-0">
+          바로가기 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </div>
+      </div>
       
       <!-- Top Alert Card: Score Gap & Retake Goal -->
       <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-slate-800/90 to-blue-950/40 border border-slate-700/80 p-5 md:p-6 shadow-xl">
@@ -765,7 +1150,11 @@
 
   <!-- Mobile Bottom Tab Bar (Fixed) -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-t border-slate-800 px-1 py-1 flex items-center justify-around">
-    <button onclick="switchTab('dashboard')" id="m-tab-btn-dashboard" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 text-blue-500">
+    <button onclick="switchTab('d2final')" id="m-tab-btn-d2final" class="mobile-nav-btn flex flex-col items-center py-1 px-1 text-rose-400 font-bold">
+      <i data-lucide="zap" class="w-4 h-4 text-amber-400 animate-pulse"></i>
+      <span class="text-[9px] mt-0.5">D-2파이널</span>
+    </button>
+    <button onclick="switchTab('dashboard')" id="m-tab-btn-dashboard" class="mobile-nav-btn flex flex-col items-center py-1 px-1 text-blue-500">
       <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
       <span class="text-[10px] mt-0.5 font-medium">대시보드</span>
     </button>
@@ -1268,24 +1657,40 @@ spec:
 
       // Desktop Tab Styles
       document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.classList.remove('bg-blue-600', 'text-white');
-        btn.classList.add('text-slate-400');
+        if (btn.id === 'tab-btn-d2final') {
+          btn.className = "nav-tab px-3 py-1.5 rounded-lg text-sm font-bold transition flex items-center gap-1.5 text-rose-300 hover:text-white bg-slate-800 shrink-0 border border-rose-500/30";
+        } else {
+          btn.classList.remove('bg-blue-600', 'text-white');
+          btn.classList.add('text-slate-400');
+        }
       });
       const activeDeskBtn = document.getElementById(`tab-btn-${tabId}`);
       if (activeDeskBtn) {
-        activeDeskBtn.classList.remove('text-slate-400');
-        activeDeskBtn.classList.add('bg-blue-600', 'text-white');
+        if (tabId === 'd2final') {
+          activeDeskBtn.className = "nav-tab px-3 py-1.5 rounded-lg text-sm font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-rose-600 to-amber-600 text-white shrink-0 shadow-lg shadow-rose-600/30";
+        } else {
+          activeDeskBtn.classList.remove('text-slate-400');
+          activeDeskBtn.classList.add('bg-blue-600', 'text-white');
+        }
       }
 
       // Mobile Bottom Nav Styles
       document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-        btn.classList.remove('text-blue-500');
-        btn.classList.add('text-slate-400');
+        if (btn.id === 'm-tab-btn-d2final') {
+          btn.className = "mobile-nav-btn flex flex-col items-center py-1 px-1 text-slate-400";
+        } else {
+          btn.classList.remove('text-blue-500');
+          btn.classList.add('text-slate-400');
+        }
       });
       const activeMobBtn = document.getElementById(`m-tab-btn-${tabId}`);
       if (activeMobBtn) {
-        activeMobBtn.classList.remove('text-slate-400');
-        activeMobBtn.classList.add('text-blue-500');
+        if (tabId === 'd2final') {
+          activeMobBtn.className = "mobile-nav-btn flex flex-col items-center py-1 px-1 text-rose-400 font-bold";
+        } else {
+          activeMobBtn.classList.remove('text-slate-400');
+          activeMobBtn.classList.add('text-blue-500');
+        }
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
